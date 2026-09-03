@@ -7,14 +7,15 @@ COPY scripts/resolve_ubuntu_snapshot.py /usr/local/bin/resolve_ubuntu_snapshot.p
 
 RUN set -eux; \
     printf '%s\n' \
-      "deb [check-valid-until=no] http://snapshot.ubuntu.com/ubuntu/${SNAPSHOT} bionic main universe" \
-      "deb [check-valid-until=no] http://snapshot.ubuntu.com/ubuntu/${SNAPSHOT} bionic-updates main universe" \
-      "deb [check-valid-until=no] http://snapshot.ubuntu.com/ubuntu/${SNAPSHOT} bionic-security main universe" \
+      "deb [check-valid-until=no] https://snapshot.ubuntu.com/ubuntu/${SNAPSHOT} bionic main universe" \
+      "deb [check-valid-until=no] https://snapshot.ubuntu.com/ubuntu/${SNAPSHOT} bionic-updates main universe" \
+      "deb [check-valid-until=no] https://snapshot.ubuntu.com/ubuntu/${SNAPSHOT} bionic-security main universe" \
       > /etc/apt/sources.list; \
     rm -rf /etc/apt/sources.list.d/*; \
-    apt-get -o Acquire::Check-Valid-Until=false update; \
+    APT_TLS='-o Acquire::https::Verify-Peer=false -o Acquire::https::Verify-Host=false'; \
+    apt-get ${APT_TLS} -o Acquire::Check-Valid-Until=false update; \
     mkdir -p /n64rf/evidence /var/cache/apt/archives; \
-    apt-get -o Acquire::Check-Valid-Until=false -y --download-only install \
+    apt-get ${APT_TLS} -o Acquire::Check-Valid-Until=false -y --download-only install \
       binutils-mips-linux-gnu build-essential git pkgconf python3; \
     : > /n64rf/evidence/transaction-packages.tsv; \
     for f in /var/cache/apt/archives/*.deb; do \
@@ -24,7 +25,7 @@ RUN set -eux; \
       printf '%s\t%s\t%s\t%s\t%s\n' "$p" "$v" "$a" "$(basename "$f")" "$s" >> /n64rf/evidence/transaction-packages.tsv; \
     done; \
     sort -o /n64rf/evidence/transaction-packages.tsv /n64rf/evidence/transaction-packages.tsv; \
-    apt-get -o Acquire::Check-Valid-Until=false -y install \
+    apt-get ${APT_TLS} -o Acquire::Check-Valid-Until=false -y install \
       binutils-mips-linux-gnu build-essential git pkgconf python3; \
     python3 /usr/local/bin/resolve_ubuntu_snapshot.py \
       --lane vanilla_reference --snapshot "${SNAPSHOT}" \
