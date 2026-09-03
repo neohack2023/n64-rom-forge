@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "N64RF Environment Freeze Receipt v1",
+  "type": "object",
+  "required": ["schema", "task", "plan_id", "plan_digest", "result", "repository", "base_commit", "freeze_commit", "environment_lock_digest", "side_effects"],
+  "properties": {
+    "schema": {"const": "n64rf.environment-freeze-receipt.v1"},
+    "task": {"const": "N64RF-PHASE0-ENV-FREEZE-01"},
+    "plan_id": {"type": "string"},
+    "plan_digest": {"type": "string", "pattern": "^SHA256:[0-9a-f]{64}$"},
+    "result": {"enum": ["PASS", "FAIL", "BLOCKED"]},
+    "repository": {"type": "string"},
+    "base_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "freeze_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "environment_lock_digest": {"type": "string", "pattern": "^SHA256:[0-9a-f]{64}$"},
+    "side_effects": {"type": "object"}
+  },
+  "additionalProperties": true
+}
