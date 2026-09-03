@@ -1,4 +1,5 @@
 from __future__ import annotations
+import ast
 import json
 import sys
 import unittest
@@ -24,6 +25,36 @@ class EnvironmentFreezeContractTests(unittest.TestCase):
 
     def test_canonical_digest_is_order_independent(self) -> None:
         self.assertEqual(canonical_digest({"b": 2, "a": 1}), canonical_digest({"a": 1, "b": 2}))
+
+    def test_snapshot_resolver_remains_python36_compatible(self) -> None:
+        resolver = ROOT / "scripts" / "resolve_ubuntu_snapshot.py"
+        source = resolver.read_text(encoding="utf-8")
+        tree = ast.parse(source, filename=str(resolver), feature_version=(3, 6))
+
+        future_features = {
+            alias.name
+            for node in tree.body
+            if isinstance(node, ast.ImportFrom) and node.module == "__future__"
+            for alias in node.names
+        }
+        self.assertNotIn("annotations", future_features)
+
+        builtin_generics = {
+            node.value.id
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Subscript)
+            and isinstance(node.value, ast.Name)
+            and node.value.id in {"dict", "list", "set", "tuple"}
+        }
+        self.assertEqual(builtin_generics, set())
+
+        unsupported_text_keywords = [
+            node
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Call)
+            and any(keyword.arg == "text" for keyword in node.keywords)
+        ]
+        self.assertEqual(unsupported_text_keywords, [])
 
 
 if __name__ == "__main__":

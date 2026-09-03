@@ -1,10 +1,10 @@
-from __future__ import annotations
 import argparse
 import hashlib
 import json
 import shutil
 import subprocess
 from pathlib import Path
+from typing import Dict, List
 
 
 def sha256_file(path: Path) -> str:
@@ -15,12 +15,18 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
-def first_line(command: list[str]) -> str:
-    proc = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True)
+def first_line(command: List[str]) -> str:
+    proc = subprocess.run(
+        command,
+        universal_newlines=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=True,
+    )
     return (proc.stdout.splitlines() or [""])[0].strip()
 
 
-def load_transaction(path: Path) -> list[dict[str, str]]:
+def load_transaction(path: Path) -> List[Dict[str, str]]:
     rows = []
     for line in path.read_text(encoding="utf-8").splitlines():
         if not line.strip():
@@ -30,8 +36,11 @@ def load_transaction(path: Path) -> list[dict[str, str]]:
     return sorted(rows, key=lambda x: (x["package"], x["architecture"], x["version"], x["filename"]))
 
 
-def full_manifest() -> list[dict[str, str]]:
-    out = subprocess.check_output(["dpkg-query", "-W", "-f=${Package}\t${Version}\t${Architecture}\n"], text=True)
+def full_manifest() -> List[Dict[str, str]]:
+    out = subprocess.check_output(
+        ["dpkg-query", "-W", "-f=${Package}\t${Version}\t${Architecture}\n"],
+        universal_newlines=True,
+    )
     rows = []
     for line in out.splitlines():
         if not line.strip():
@@ -41,7 +50,7 @@ def full_manifest() -> list[dict[str, str]]:
     return sorted(rows, key=lambda x: (x["package"], x["architecture"], x["version"]))
 
 
-def executable_record(name: str) -> dict[str, str]:
+def executable_record(name: str) -> Dict[str, str]:
     path = shutil.which(name)
     if not path:
         raise RuntimeError(f"required executable not found: {name}")
