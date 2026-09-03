@@ -1,0 +1,13 @@
+# N64 ROM Forge forbidden payload boundary
+*.z64
+*.v64
+*.n64
+baserom.*
+build/
+roms/
+private-roms/
+*.bps
+__pycache__/
+.pytest_cache/
+*.pyc
+.venv/

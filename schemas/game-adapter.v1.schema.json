@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://n64rf.local/schemas/game-adapter.v1.schema.json",
+  "title": "N64 ROM Forge Game Adapter v1",
+  "type": "object",
+  "required": ["schema", "game_id", "region", "revision", "accepted_inputs", "byte_order", "cic_ipl3", "source_pins"],
+  "properties": {
+    "schema": {"const": "n64rf.game-adapter.v1"},
+    "game_id": {"type": "string", "minLength": 1},
+    "region": {"type": "string", "minLength": 1},
+    "revision": {"type": "string", "minLength": 1},
+    "accepted_inputs": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["sha1", "byte_order", "writable"], "properties": {"sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "byte_order": {"enum": ["z64", "v64", "n64"]}, "writable": {"const": false}}, "additionalProperties": true}},
+    "byte_order": {"enum": ["z64", "v64", "n64"]},
+    "cic_ipl3": {"type": "object", "required": ["status"], "additionalProperties": true},
+    "source_pins": {"type": "object", "minProperties": 1},
+    "memory_layout": {"type": "object"},
+    "segments": {"type": "object"},
+    "compression_formats": {"type": "array"},
+    "asset_formats": {"type": "array"},
+    "emulator_requirements": {"type": "array"},
+    "hardware_constraints": {"type": "array"}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Checksum Receipt v1",
+  "type": "object",
+  "required": ["schema", "crc1", "crc2", "provenance", "repair_performed"],
+  "properties": {
+    "schema": {"const": "n64rf.checksum-receipt.v1"},
+    "crc1": {"type": "string", "pattern": "^0x[0-9A-Fa-f]{8}$"},
+    "crc2": {"type": "string", "pattern": "^0x[0-9A-Fa-f]{8}$"},
+    "provenance": {"type": "object"},
+    "repair_performed": {"type": "boolean"},
+    "verification": {"type": "object"}
+  },
+  "additionalProperties": true
+}

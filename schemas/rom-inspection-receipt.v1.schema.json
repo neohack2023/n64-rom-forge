@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ROM Inspection Receipt v1",
+  "type": "object",
+  "required": ["schema", "path_label", "sha1", "sha256", "byte_order", "read_only", "header"],
+  "properties": {
+    "schema": {"const": "n64rf.rom-inspection-receipt.v1"},
+    "path_label": {"type": "string"},
+    "sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "byte_order": {"enum": ["z64", "v64", "n64", "unknown"]},
+    "read_only": {"type": "boolean"},
+    "header": {"type": "object"},
+    "cic_ipl3_evidence": {"type": ["object", "null"]}
+  },
+  "additionalProperties": true
+}

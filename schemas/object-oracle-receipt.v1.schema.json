@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Object Oracle Receipt v1",
+  "type": "object",
+  "required": ["schema", "candidate_sha256", "reference_sha256", "target_identity", "objdiff"],
+  "properties": {
+    "schema": {"const": "n64rf.object-oracle-receipt.v1"},
+    "candidate_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reference_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "target_identity": {"type": "string"},
+    "objdiff": {"type": "object"},
+    "collateral_gate": {"type": "object"}
+  },
+  "additionalProperties": true
+}
