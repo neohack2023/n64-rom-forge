@@ -1,3 +1,3 @@
-"""N64 ROM Forge Phase 0 substrate."""
+"""N64 ROM Forge read-only intake substrate."""
 
-__version__ = "0.0.1"
+__version__ = "0.1.0"

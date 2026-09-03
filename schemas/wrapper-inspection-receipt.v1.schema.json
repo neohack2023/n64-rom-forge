@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Wrapper Inspection Receipt v1",
+  "type": "object",
+  "required": ["schema", "source", "normalized_view", "header", "ipl3", "cic", "adapter", "checksum", "side_effects"],
+  "properties": {
+    "schema": {"const": "n64rf.wrapper-inspection-receipt.v1"},
+    "source": {"type": "object", "required": ["path_label", "size_bytes", "detected_byte_order", "sha1", "sha256", "wrapper_open_mode", "source_integrity"]},
+    "normalized_view": {"type": "object"},
+    "header": {"type": "object"},
+    "ipl3": {"type": "object"},
+    "cic": {"type": "object"},
+    "adapter": {"type": "object", "required": ["status"]},
+    "canonical_view": {"type": ["object", "null"]},
+    "trailing_data": {"type": ["object", "null"]},
+    "checksum": {"type": "object"},
+    "side_effects": {"type": "object", "required": ["rom_bytes_modified", "rom_bytes_persisted", "canonical_rom_persisted", "source_integrity"]}
+  },
+  "additionalProperties": true
+}
