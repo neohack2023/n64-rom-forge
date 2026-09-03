@@ -3,6 +3,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 
@@ -24,7 +25,22 @@ def run(root: Path) -> dict:
         raise RuntimeError("unit tests failed")
     checks["unit_tests"] = "PASS"
 
-    forbidden = subprocess.run([sys.executable, "scripts/check_forbidden_payloads.py", "."], cwd=root, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    # Scan the exact tracked tree, not the checkout's .git metadata. This keeps
+    # the commercial-payload policy unchanged while making CI and local scans
+    # evaluate the same repository content.
+    with tempfile.TemporaryDirectory() as td:
+        archive = Path(td) / "tracked-tree.tar"
+        scan_root = Path(td) / "tree"
+        scan_root.mkdir()
+        subprocess.run(["git", "archive", "--format=tar", f"--output={archive}", "HEAD"], cwd=root, check=True)
+        subprocess.run(["tar", "-xf", str(archive), "-C", str(scan_root)], check=True)
+        forbidden = subprocess.run(
+            [sys.executable, str(root / "scripts" / "check_forbidden_payloads.py"), str(scan_root)],
+            cwd=root,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
     checks["forbidden_payload_output"] = forbidden.stdout
     if forbidden.returncode:
         raise RuntimeError("forbidden payload scan failed")
