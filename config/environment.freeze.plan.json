@@ -1,0 +1,39 @@
+{
+  "base": {"branch": "main", "commit": "65f251cc350d09c375a8d8ae2f2af0d1c8742511", "tree": "346bae58e16c41854eeaa3c2b1e2b18b6150fa04"},
+  "base_images": {
+    "hackersm64": {"amd64_manifest_digest": "sha256:79676deb51ebb02885b0b9d33788e78a37cf1045ad79d1bb04c6a222c3556b3d", "index_digest": "sha256:2edbbc5dc405e9612ba3584ce95480277e3eb374407b5505fe26f17df77c7dbc", "tag_anchor": "ubuntu:jammy-20260810"},
+    "vanilla_reference": {"amd64_manifest_digest": "sha256:dca176c9663a7ba4c1f0e710986f5a25e672842963d95b960191e2d9f7185ebe", "index_digest": "sha256:152dc042452c496007f07ca9127571cb9c29697f42acbfad72324b2bb2e43c98", "tag_anchor": "ubuntu:bionic-20230530"}
+  },
+  "executable_contract": {
+    "capture": ["resolved path", "sha256", "version first line"],
+    "hackersm64": ["mips-linux-gnu-as", "mips-linux-gnu-ld", "mips-linux-gnu-objdump", "mips-linux-gnu-objcopy", "mips-linux-gnu-gcc", "make", "python3", "pkgconf"],
+    "vanilla_reference": ["mips-linux-gnu-as", "mips-linux-gnu-ld", "mips-linux-gnu-objdump", "mips-linux-gnu-objcopy", "make", "python3", "pkgconf", "git"]
+  },
+  "execution_branch": "bootstrap/phase0-env-freeze-01",
+  "generated_after_pass": ["config/environment.lock.json", "evidence/environment-freeze-receipt.json"],
+  "out_of_scope": ["ROM intake", "ROM build", "asset extraction", "modification", "emulator validation", "hardware validation", "BPS generation"],
+  "package_contract": {
+    "capture": ["apt transaction direct+dependency .deb package/version/arch/filename/sha256", "full post-install dpkg manifest"],
+    "hackersm64": ["binutils-mips-linux-gnu", "bsdextrautils", "build-essential", "gcc-mips-linux-gnu", "libcapstone-dev", "pkgconf", "python3"],
+    "vanilla_reference": ["binutils-mips-linux-gnu", "build-essential", "git", "pkgconf", "python3"]
+  },
+  "plan_digest": "SHA256:8cc2cda1b8467da58f43c37516c1a9762222ec8c6233cdf12b6ed8ba8b3f3283",
+  "plan_digest_rule": "SHA256(canonical JSON of this object with plan_digest and plan_digest_rule omitted)",
+  "plan_id": "MASON-20260903-N64RF-PHASE0-ENV-FREEZE-01-MAIN",
+  "pr": {"base": "main", "draft": true},
+  "project_built_tools_policy": "hash before first use; if ROM-dependent mark BLOCKED_FOR_PHASE0, do not invent targets",
+  "promotion": "commit generated lock+receipt only after CI artifact is independently read back and verified; merge to main only if all gates pass",
+  "repo_changes": [".github/workflows/phase0-env-freeze.yml", "docker/env/vanilla-reference.Dockerfile", "docker/env/hackersm64.Dockerfile", "config/environment.freeze.plan.json", "schemas/environment-lock.v1.schema.json", "schemas/environment-freeze-receipt.v1.schema.json", "scripts/resolve_ubuntu_snapshot.py", "scripts/hash_environment.py", "scripts/verify_objdiff.py", "scripts/verify_scaffold.py", "scripts/phase0_env_freeze.py", "tests/test_environment_freeze.py"],
+  "repository": "neohack2023/n64-rom-forge",
+  "schema": "n64rf.mason-plan.v1",
+  "snapshots": {"hackersm64": "20260810T000000Z", "vanilla_reference": "20230530T000000Z"},
+  "state": "AUTHORIZED_BY_DIRECT_USER_REQUEST",
+  "success_gate": ["main precondition exact", "immutable base image pulls pass", "snapshot apt metadata resolves and signed apt update passes", "apt transaction package hashes captured", "post-install package manifests captured", "required executable hashes and versions captured", "objdiff observed sha256 equals expected and version executes", "scaffold verification passes", "environment_lock_digest emitted", "no ROM/build/patch payload"],
+  "task": "N64RF-PHASE0-ENV-FREEZE-01",
+  "upstreams": {
+    "hackersm64": {"commit": "3f1f7f41beac4ff0287bcb5f919efb52856ec27b", "dockerfile_base": "ubuntu:22.04", "repo": "HackerN64/HackerSM64"},
+    "objdiff": {"asset": "objdiff-cli-linux-x86_64", "asset_id": 535810687, "commit": "fba10a617154f19b3fc25c8817dc81f81d8489b5", "repo": "encounter/objdiff", "sha256": "c8290281e82114bcc1a06ff73061110d3902a177822e750337de2537188e358f", "size": 6662544, "tag": "v3.8.1"},
+    "vanilla_reference": {"commit": "9921382a68bb0c865e5e45eb594d9c64db59b1af", "dockerfile_base": "ubuntu:18.04", "repo": "n64decomp/sm64"}
+  },
+  "workflow": {"artifact": "environment-freeze-output", "network": "enabled only for immutable Ubuntu snapshot/package resolution, pinned base image pulls, exact objdiff asset; no deterministic ROM build in this gate", "permissions": "contents:read", "rom_access": "none", "secrets": "none", "trigger": "pull_request"}
+}
