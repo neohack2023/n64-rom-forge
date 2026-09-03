@@ -1,0 +1,52 @@
+from __future__ import annotations
+
+import json
+import sys
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+from n64rf.adapters.goldeneye import GOLDENEYE_US
+from n64rf.adapters.registry import list_adapters
+from n64rf.adapters.sm64 import SM64_US
+from n64rf.receipts import ExecutionReceipt
+from n64rf.rom_inspector import detect_byte_order
+
+
+class ContractTests(unittest.TestCase):
+    def test_json_schemas_parse(self) -> None:
+        for path in sorted((ROOT / "schemas").glob("*.json")):
+            with path.open("r", encoding="utf-8") as f:
+                parsed = json.load(f)
+            self.assertEqual(parsed["type"], "object")
+
+    def test_sm64_adapter_accepts_only_frozen_us_identity(self) -> None:
+        self.assertTrue(SM64_US.accepts("9bef1128717f958171a4afac3ed78ee2bb4e86ce", "z64"))
+        self.assertFalse(SM64_US.accepts("0" * 40, "z64"))
+        self.assertFalse(SM64_US.accepts("9bef1128717f958171a4afac3ed78ee2bb4e86ce", "v64"))
+
+    def test_goldeneye_adapter_is_registered(self) -> None:
+        self.assertIn("goldeneye-007-us", list_adapters())
+        self.assertEqual(GOLDENEYE_US.game_id, "goldeneye-007")
+
+    def test_byte_order_magic(self) -> None:
+        self.assertEqual(detect_byte_order(bytes.fromhex("80371240")), "z64")
+        self.assertEqual(detect_byte_order(bytes.fromhex("37804012")), "v64")
+        self.assertEqual(detect_byte_order(bytes.fromhex("40123780")), "n64")
+        self.assertEqual(detect_byte_order(b"NOPE"), "unknown")
+
+    def test_execution_receipt_defaults_to_not_run(self) -> None:
+        receipt = ExecutionReceipt(
+            schema="n64rf.execution-receipt.v1",
+            plan_id="MASON-20260902-N64RF-PHASE0-SUBSTRATE-01",
+            plan_digest="SHA256:bb66563dbf1871a433967807adf77d9f97780a8f755624c17e880a2916402fd8",
+            repository="neohack2023/n64-rom-forge",
+            branch="bootstrap/phase0-substrate-01",
+        )
+        self.assertEqual(receipt.phase0_state, "NOT_RUN")
+
+
+if __name__ == "__main__":
+    unittest.main()

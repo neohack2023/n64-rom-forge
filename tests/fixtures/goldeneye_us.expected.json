@@ -1,0 +1,16 @@
+{
+  "adapter_id": "goldeneye-007-us",
+  "source_sha1": "cb9bbf8fbcb5b204f56ec2d43fc0e555ecfd0927",
+  "source_sha256": "6dd88de4a587962690579e6d7c1c616a34f8b217c75333691a12b312d1314fff",
+  "source_byte_order": "v64",
+  "source_size_bytes": 16777216,
+  "canonical_sha1": "abe01e4aeb033b6c0836819f549c791b26cfde83",
+  "canonical_sha256": "2cdcec8a9f0cb6e36337f3ee39d8ad105dc8afa6ba1c02d466e8f5b771f9a162",
+  "canonical_size_bytes": 12582912,
+  "tail_sha1": "fa05af545d822ca108195cbe64e1f251e3cc111e",
+  "tail_sha256": "70894064d5c6bae8b8b7c303d12193adebd7caa8083076fd04578ecc5905071a",
+  "tail_size_bytes": 4194304,
+  "cic": "CIC-NUS-6102",
+  "crc1": "0xDCBC50D1",
+  "crc2": "0x09FD1AA3"
+}

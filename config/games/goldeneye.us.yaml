@@ -1,0 +1,40 @@
+schema: n64rf.game-adapter.v1
+adapter_id: goldeneye-007-us
+game_id: goldeneye-007
+title: GoldenEye 007
+region: US
+revision: "0"
+accepted_inputs:
+  - sha1: abe01e4aeb033b6c0836819f549c791b26cfde83
+    sha256: 2cdcec8a9f0cb6e36337f3ee39d8ad105dc8afa6ba1c02d466e8f5b771f9a162
+    byte_order: z64
+    size_bytes: 12582912
+    writable: false
+canonicalization:
+  rule: canonical-prefix
+  source_representation_observed:
+    byte_order: v64
+    size_bytes: 16777216
+    raw_sha1: cb9bbf8fbcb5b204f56ec2d43fc0e555ecfd0927
+    raw_sha256: 6dd88de4a587962690579e6d7c1c616a34f8b217c75333691a12b312d1314fff
+  trailing_data:
+    size_bytes: 4194304
+    normalized_sha1: fa05af545d822ca108195cbe64e1f251e3cc111e
+    normalized_sha256: 70894064d5c6bae8b8b7c303d12193adebd7caa8083076fd04578ecc5905071a
+    classification: NONCANONICAL_TRAILING_DATA
+cic_ipl3:
+  status: evidence_backed_candidate
+  value: CIC-NUS-6102
+  md5: e24dd796b2fa16511521139d28c8356b
+  crc32: 0x90BB6CB5
+  confidence: high
+source_pins:
+  decomp: n64decomp/007
+  intake_receipt: N64RF-GE007-INTAKE-01
+memory_layout: {}
+segments: {}
+compression_formats: []
+asset_formats: []
+emulator_requirements: []
+expansion_pak_required: null
+hardware_constraints: []

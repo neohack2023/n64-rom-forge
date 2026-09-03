@@ -1,0 +1,35 @@
+schema: n64rf.toolchain-lock.v1
+state: REQUIRES_IMMUTABLE_RESOLUTION_BEFORE_BUILD
+network_policy_for_build: disabled
+lanes:
+  vanilla_reference:
+    upstream_dockerfile_base: ubuntu:18.04
+    base_image_digest: UNRESOLVED_FAIL_CLOSED
+    compiler_mode: ido
+    ido_execution_mode_default: static-recompiled-irix-tools
+    packages:
+      - binutils-mips-linux-gnu
+      - build-essential
+      - git
+      - pkgconf
+      - python3
+  hackersm64:
+    upstream_dockerfile_base: ubuntu:22.04
+    base_image_digest: UNRESOLVED_FAIL_CLOSED
+    compiler_mode: gcc
+    packages:
+      - binutils-mips-linux-gnu
+      - bsdextrautils
+      - build-essential
+      - gcc-mips-linux-gnu
+      - libcapstone-dev
+      - pkgconf
+      - python3
+freeze_requirements:
+  - resolve immutable base-image digest
+  - record exact installed package versions
+  - record sha256 and --version for compiler assembler linker objdump objcopy make python
+  - record hashes of project-built tools used by validation oracles
+  - record final environment digest
+  - disable network for deterministic build and object-oracle execution
+  - fail closed on drift

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Execution Receipt v1",
+  "type": "object",
+  "required": ["schema", "plan_id", "plan_digest", "repository", "branch", "phase0_state", "side_effects", "verification"],
+  "properties": {
+    "schema": {"const": "n64rf.execution-receipt.v1"},
+    "plan_id": {"type": "string"},
+    "plan_digest": {"type": "string", "pattern": "^SHA256:[0-9a-f]{64}$"},
+    "repository": {"type": "string"},
+    "branch": {"type": "string"},
+    "phase0_state": {"enum": ["NOT_RUN", "RUNNING", "PASS", "FAIL", "BLOCKED"]},
+    "side_effects": {"type": "object"},
+    "verification": {"type": "object"}
+  },
+  "additionalProperties": true
+}

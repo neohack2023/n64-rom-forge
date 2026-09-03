@@ -1,0 +1,21 @@
+schema: n64rf.upstreams-lock.v1
+frozen_at: "2026-09-02"
+repository_baseline:
+  repository: neohack2023/n64-rom-forge
+  branch: main
+  commit: 0476eab45e725a2dbe3c93af0866588b3e0e6c03
+vanilla_reference:
+  repository: n64decomp/sm64
+  branch: master
+  commit: 9921382a68bb0c865e5e45eb594d9c64db59b1af
+  role: exact-reference-rebuild-and-object-oracle-source
+modification_target:
+  repository: HackerN64/HackerSM64
+  branch: master
+  commit: 3f1f7f41beac4ff0287bcb5f919efb52856ec27b
+  role: future-source-modification-target
+object_diff:
+  repository: encounter/objdiff
+  tag: v3.8.1
+  commit: fba10a617154f19b3fc25c8817dc81f81d8489b5
+  linux_x86_64_asset_sha256: c8290281e82114bcc1a06ff73061110d3902a177822e750337de2537188e358f
