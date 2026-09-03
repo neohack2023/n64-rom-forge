@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from .base import AcceptedInput, GameAdapter
+from .base import AcceptedInput, CanonicalCandidate, GameAdapter
 
 SM64_US = GameAdapter(
     schema="n64rf.game-adapter.v1",
+    adapter_id="sm64-us",
     game_id="sm64",
     region="US",
     revision="retail-us",
@@ -12,6 +13,13 @@ SM64_US = GameAdapter(
             sha1="9bef1128717f958171a4afac3ed78ee2bb4e86ce",
             byte_order="z64",
             writable=False,
+        ),
+    ),
+    canonical_candidates=(
+        CanonicalCandidate(
+            sha1="9bef1128717f958171a4afac3ed78ee2bb4e86ce",
+            byte_order="z64",
+            rule="full-image",
         ),
     ),
     byte_order="z64",
