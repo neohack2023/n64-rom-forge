@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, asdict
-from hashlib import sha1, sha256
+from dataclasses import asdict, dataclass
+from hashlib import md5, sha1, sha256
 from pathlib import Path
-from typing import BinaryIO, Any
+from typing import Any
+import binascii
 
 _MAGIC = {
     bytes.fromhex("80371240"): "z64",
@@ -11,81 +12,124 @@ _MAGIC = {
     bytes.fromhex("40123780"): "n64",
 }
 
+_REGION_NAMES = {
+    "E": "USA/NTSC",
+    "J": "Japan/NTSC",
+    "P": "Europe/PAL",
+}
+
 @dataclass(frozen=True)
-class RomInspection:
-    schema: str
+class SourceEvidence:
     path_label: str
+    size_bytes: int
+    filesystem_mode_octal: str
+    filesystem_writable: bool
+    wrapper_open_mode: str
+    wrapper_source_mutation: bool
+    magic_hex: str
+    detected_byte_order: str
     sha1: str
     sha256: str
-    byte_order: str
-    read_only: bool
-    header: dict[str, Any]
-    cic_ipl3_evidence: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
-def _hash_stream(stream: BinaryIO, chunk_size: int = 1024 * 1024) -> tuple[str, str]:
-    h1, h256 = sha1(), sha256()
-    while True:
-        chunk = stream.read(chunk_size)
-        if not chunk:
-            break
-        h1.update(chunk)
-        h256.update(chunk)
-    return h1.hexdigest(), h256.hexdigest()
+@dataclass(frozen=True)
+class RomInspection:
+    schema: str
+    source: SourceEvidence
+    normalized_view: dict[str, Any]
+    header: dict[str, Any]
+    ipl3: dict[str, Any]
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+def _hash_bytes(data: bytes) -> tuple[str, str]:
+    return sha1(data).hexdigest(), sha256(data).hexdigest()
 
 def detect_byte_order(first4: bytes) -> str:
     return _MAGIC.get(first4, "unknown")
 
-def _normalize_header(header: bytes, byte_order: str) -> bytes:
+def normalize_to_z64(data: bytes, byte_order: str) -> bytes:
     if byte_order == "z64":
-        return header
+        return data
     if byte_order == "v64":
-        if len(header) % 2:
-            raise ValueError("v64 header length must be even")
-        out = bytearray(header)
+        if len(data) % 2:
+            raise ValueError("v64 input length must be even")
+        out = bytearray(data)
         for i in range(0, len(out), 2):
             out[i], out[i + 1] = out[i + 1], out[i]
         return bytes(out)
     if byte_order == "n64":
-        if len(header) % 4:
-            raise ValueError("n64 header length must be divisible by four")
+        if len(data) % 4:
+            raise ValueError("n64 input length must be divisible by four")
         out = bytearray()
-        for i in range(0, len(header), 4):
-            out.extend(reversed(header[i:i + 4]))
+        for i in range(0, len(data), 4):
+            out.extend(reversed(data[i:i + 4]))
         return bytes(out)
-    return header
+    raise ValueError("unsupported or unknown N64 byte order")
 
-def inspect_rom(path: str | Path, *, path_label: str | None = None) -> RomInspection:
+def parse_header(z64: bytes) -> dict[str, Any]:
+    if len(z64) < 0x40:
+        raise ValueError("ROM too small for N64 header")
+    region_code = chr(z64[0x3E]) if 32 <= z64[0x3E] < 127 else f"0x{z64[0x3E]:02X}"
+    return {
+        "magic_hex": z64[:4].hex(),
+        "entry_point": f"0x{int.from_bytes(z64[0x08:0x0C], 'big'):08X}",
+        "crc1": f"0x{int.from_bytes(z64[0x10:0x14], 'big'):08X}",
+        "crc2": f"0x{int.from_bytes(z64[0x14:0x18], 'big'):08X}",
+        "image_name": z64[0x20:0x34].decode("ascii", errors="replace").rstrip("\x00 ").strip(),
+        "game_code": z64[0x3B:0x3F].decode("ascii", errors="replace"),
+        "region_code": region_code,
+        "region_name": _REGION_NAMES.get(region_code, "unknown"),
+        "revision": z64[0x3F],
+    }
+
+def fingerprint_ipl3(z64: bytes) -> dict[str, Any]:
+    if len(z64) < 0x1000:
+        return {"status": "INSUFFICIENT_DATA"}
+    ipl3 = z64[0x40:0x1000]
+    crc32_value = binascii.crc32(ipl3) & 0xFFFFFFFF
+    return {
+        "status": "FINGERPRINTED",
+        "md5": md5(ipl3).hexdigest(),
+        "crc32": f"0x{crc32_value:08X}",
+    }
+
+def inspect_source(path: str | Path) -> tuple[RomInspection, bytes]:
     p = Path(path)
-    mode = p.stat().st_mode
-    read_only = (mode & 0o222) == 0
-
-    with p.open("rb") as f:
-        first = f.read(0x40)
-        order = detect_byte_order(first[:4])
-        f.seek(0)
-        digest1, digest256 = _hash_stream(f)
-
-    normalized = _normalize_header(first, order)
-    header: dict[str, Any] = {"magic": normalized[:4].hex()}
-    if len(normalized) >= 0x18:
-        header.update({
-            "clock_rate": int.from_bytes(normalized[0x04:0x08], "big"),
-            "entry_point": f"0x{int.from_bytes(normalized[0x08:0x0C], 'big'):08X}",
-            "release": f"0x{int.from_bytes(normalized[0x0C:0x10], 'big'):08X}",
-            "crc1": f"0x{int.from_bytes(normalized[0x10:0x14], 'big'):08X}",
-            "crc2": f"0x{int.from_bytes(normalized[0x14:0x18], 'big'):08X}",
-        })
-
-    return RomInspection(
-        schema="n64rf.rom-inspection-receipt.v1",
-        path_label=path_label or p.name,
-        sha1=digest1,
-        sha256=digest256,
-        byte_order=order,
-        read_only=read_only,
-        header=header,
-        cic_ipl3_evidence=None,
+    stat = p.stat()
+    with p.open("rb") as stream:
+        data = stream.read()
+    if len(data) < 4:
+        raise ValueError("ROM is too small to contain N64 byte-order magic")
+    raw_sha1, raw_sha256 = _hash_bytes(data)
+    byte_order = detect_byte_order(data[:4])
+    z64 = normalize_to_z64(data, byte_order)
+    normalized_sha1, normalized_sha256 = _hash_bytes(z64)
+    evidence = SourceEvidence(
+        path_label=p.name,
+        size_bytes=len(data),
+        filesystem_mode_octal=oct(stat.st_mode & 0o777),
+        filesystem_writable=bool(stat.st_mode & 0o222),
+        wrapper_open_mode="rb",
+        wrapper_source_mutation=False,
+        magic_hex=data[:4].hex(),
+        detected_byte_order=byte_order,
+        sha1=raw_sha1,
+        sha256=raw_sha256,
     )
+    inspection = RomInspection(
+        schema="n64rf.rom-inspection-receipt.v1",
+        source=evidence,
+        normalized_view={"byte_order": "z64", "sha1": normalized_sha1, "sha256": normalized_sha256, "persisted": False},
+        header=parse_header(z64),
+        ipl3=fingerprint_ipl3(z64),
+    )
+    return inspection, z64
+
+def hash_source(path: str | Path) -> tuple[str, str]:
+    with Path(path).open("rb") as stream:
+        data = stream.read()
+    return _hash_bytes(data)

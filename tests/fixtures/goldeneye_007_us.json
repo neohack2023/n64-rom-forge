@@ -1,0 +1,10 @@
+{
+  "fixture_id": "N64RF-GE007-FIXTURE-01",
+  "external_rom_env": "N64RF_GOLDENEYE_ROM",
+  "rom_payload_committed": false,
+  "source": {"size_bytes": 16777216, "byte_order": "v64", "sha1": "cb9bbf8fbcb5b204f56ec2d43fc0e555ecfd0927", "sha256": "6dd88de4a587962690579e6d7c1c616a34f8b217c75333691a12b312d1314fff"},
+  "canonical": {"size_bytes": 12582912, "sha1": "abe01e4aeb033b6c0836819f549c791b26cfde83", "sha256": "2cdcec8a9f0cb6e36337f3ee39d8ad105dc8afa6ba1c02d466e8f5b771f9a162"},
+  "tail": {"size_bytes": 4194304, "sha1": "fa05af545d822ca108195cbe64e1f251e3cc111e", "sha256": "70894064d5c6bae8b8b7c303d12193adebd7caa8083076fd04578ecc5905071a"},
+  "header": {"image_name": "GOLDENEYE", "game_code": "NGEE", "region_code": "E", "revision": 0, "crc1": "0xDCBC50D1", "crc2": "0x09FD1AA3"},
+  "cic": "CIC-NUS-6102"
+}

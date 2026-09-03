@@ -1,4 +1,5 @@
 schema: n64rf.game-adapter.v1
+adapter_id: sm64-us
 game_id: sm64
 title: Super Mario 64
 region: US
@@ -7,6 +8,7 @@ accepted_inputs:
   - sha1: 9bef1128717f958171a4afac3ed78ee2bb4e86ce
     byte_order: z64
     writable: false
+    canonical_rule: exact
 secondary_inputs:
   hackersm64_jp:
     sha1: 8a20a5c83d6ceb0f0506cfc9fa20d8f438cafe51

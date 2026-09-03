@@ -2,16 +2,23 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "ROM Inspection Receipt v1",
   "type": "object",
-  "required": ["schema", "path_label", "sha1", "sha256", "byte_order", "read_only", "header"],
+  "required": ["schema", "source", "normalized_view", "header", "ipl3"],
   "properties": {
     "schema": {"const": "n64rf.rom-inspection-receipt.v1"},
-    "path_label": {"type": "string"},
-    "sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
-    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "byte_order": {"enum": ["z64", "v64", "n64", "unknown"]},
-    "read_only": {"type": "boolean"},
+    "source": {
+      "type": "object",
+      "required": ["path_label", "size_bytes", "wrapper_open_mode", "magic_hex", "detected_byte_order", "sha1", "sha256"],
+      "properties": {
+        "wrapper_open_mode": {"const": "rb"},
+        "detected_byte_order": {"enum": ["z64", "v64", "n64"]},
+        "sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": true
+    },
+    "normalized_view": {"type": "object"},
     "header": {"type": "object"},
-    "cic_ipl3_evidence": {"type": ["object", "null"]}
+    "ipl3": {"type": "object"}
   },
   "additionalProperties": true
 }
