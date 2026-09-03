@@ -1,0 +1,57 @@
+name: Phase 0 environment freeze
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/phase0-env-freeze.yml"
+      - "docker/env/**"
+      - "config/environment.freeze.plan.json"
+      - "schemas/environment-*.json"
+      - "scripts/hash_environment.py"
+      - "scripts/phase0_env_freeze.py"
+      - "scripts/resolve_ubuntu_snapshot.py"
+      - "scripts/verify_objdiff.py"
+      - "scripts/verify_scaffold.py"
+      - "tests/test_environment_freeze.py"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase0-env-freeze-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  freeze:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Verify main binding
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${{ github.event.pull_request.base.sha }}" = "65f251cc350d09c375a8d8ae2f2af0d1c8742511"
+          git merge-base --is-ancestor 65f251cc350d09c375a8d8ae2f2af0d1c8742511 HEAD
+
+      - name: Freeze immutable environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/phase0_env_freeze.py
+
+      - name: Upload immutable freeze evidence
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: environment-freeze-output
+          path: |
+            config/environment.lock.json
+            evidence/environment-freeze-receipt.json
+          if-no-files-found: error
+          retention-days: 30

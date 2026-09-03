@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "N64RF Environment Lock v1",
+  "type": "object",
+  "required": ["schema", "canonicalization", "repository", "source_pins", "base_images", "snapshots", "lanes", "objdiff", "scaffold_verification", "environment_lock_digest"],
+  "properties": {
+    "schema": {"const": "n64rf.environment-lock.v1"},
+    "canonicalization": {"const": "n64rf-canonical-json-v1"},
+    "repository": {"type": "object"},
+    "source_pins": {"type": "object"},
+    "base_images": {"type": "object"},
+    "snapshots": {"type": "object"},
+    "lanes": {"type": "object"},
+    "objdiff": {"type": "object"},
+    "scaffold_verification": {"type": "object"},
+    "environment_lock_digest": {"type": "string", "pattern": "^SHA256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": true
+}
