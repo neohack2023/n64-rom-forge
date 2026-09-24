@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://n64rf.local/schemas/emulator-backend.v1.schema.json",
+  "title": "N64 ROM Forge Emulator Backend Contract v1",
+  "type": "object",
+  "required": ["schema", "contract_id", "backend_identity", "capabilities"],
+  "properties": {
+    "schema": {"const": "n64rf.emulator-backend.v1"},
+    "contract_id": {"const": "N64RF_EMULATOR_BACKEND_01"},
+    "backend_identity": {
+      "type": "object",
+      "required": ["backend_id", "adapter_version"],
+      "properties": {
+        "backend_id": {"type": "string", "minLength": 1},
+        "repository": {"type": ["string", "null"]},
+        "revision": {"type": ["string", "null"]},
+        "build_digest": {"type": ["string", "null"]},
+        "adapter_version": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "capabilities": {
+      "type": "object",
+      "required": ["required", "optional", "denied", "unsupported"],
+      "properties": {
+        "required": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "optional": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "denied": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "unsupported": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}
