@@ -1,0 +1,61 @@
+{
+  "schema": "n64rf.rom-knowledge.v1",
+  "game": "Diddy Kong Racing",
+  "region": "USA",
+  "revision": "Rev A",
+  "identity": {
+    "size_bytes": 12582912,
+    "md5": "b31f8cca50f31acc9b999ed5b779d6ed",
+    "sha1": "6d96743d46f8c0cd0edb0ec5600b003c89b93755",
+    "sha256": "7de1a8fb2a9558cfc3d9ad4497df698c1e89cf7095ac1531557df2af40ba8bcf",
+    "game_code": "NDYE",
+    "version": 1
+  },
+  "asset_lut": {
+    "rom_offset": "0xED0E0",
+    "payload_base": "0xED1B0",
+    "top_level_sections": 50
+  },
+  "compression": {
+    "name": "DKR RZIP",
+    "layout": "le32 decoded_size + 0x09 + raw_deflate + zero_padding",
+    "validated_nested_decodes": 1052
+  },
+  "banks": {
+    "level_models": [26, 27],
+    "object_models": [28, 29],
+    "animation_ids": [30],
+    "object_animations": [31, 32],
+    "object_definitions": [33, 34],
+    "level_object_maps": [20, 21]
+  },
+  "level_object_maps": {
+    "slots": 138,
+    "non_empty_maps": 136,
+    "empty_indices": [81, 99],
+    "placements": 9426,
+    "unique_object_ids": 85,
+    "slot0_header_offset": "0xBA",
+    "slot1_header_offset": "0x36"
+  },
+  "runtime": {
+    "object_constructor": "0x8000EA54",
+    "level_selector": "0x8006B490",
+    "object_map_loader": "0x8000C8F8"
+  },
+  "direct_boot_validation": {
+    "state": "PASS_SINGLE_LEVEL",
+    "level_index": 5,
+    "level_name": "Ancient Lake",
+    "slot0_map": 5,
+    "slot1_map": 73,
+    "method": "change only saved level argument before native transition selector"
+  },
+  "not_promoted": [
+    "generalized named-level launcher",
+    "a1 transition semantic",
+    "remaining transition tuple semantics",
+    "object behavior semantic names",
+    "object placement parameter schemas"
+  ]
+}

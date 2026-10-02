@@ -1,0 +1,28 @@
+{
+  "schema": "n64rf.emulator-runtime.v1",
+  "name": "mupen64plus-2.6.0-debug-current-ui",
+  "state": "HOST02_VALIDATED",
+  "core_source": {
+    "repository": "mupen64plus/mupen64plus-core",
+    "commit": "b0d68c20f49b8f833afa21450e0e8874c87c13c4"
+  },
+  "ui_source": {
+    "repository": "mupen64plus/mupen64plus-ui-console",
+    "commit": "1a68327fddda71f1acbad8a63ef04288b1887d19"
+  },
+  "windows_build": {
+    "toolset": "Visual Studio 2022 Build Tools v143",
+    "platform": "x64",
+    "debugger_define": "DEBUGGER=1"
+  },
+  "validated_runtime": {
+    "ui_sha256": "a81a1b4c85df90423ead72739957a045c158b9381b9871b0a86353461ff6bc7e",
+    "core_sha256": "c09eab0eed673d50127479cdb3e1e40c6f992c151880bc186f3c9b2e8d449e5d",
+    "required_args": ["--debug", "--emumode", "1"],
+    "video_plugin": "mupen64plus-video-rice.dll",
+    "input_plugin": "mupen64plus-input-sdl.dll",
+    "rsp_plugin": "mupen64plus-rsp-hle.dll"
+  },
+  "binary_distribution": "not_committed",
+  "reason": "Commit reproducible source pins, build/patch tooling and hashes; keep generated third-party runtime binaries external."
+}

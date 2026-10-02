@@ -1,0 +1,32 @@
+{
+  "schema": "n64.port_experiment_envelope.v1",
+  "experiment_id": "REQUIRED",
+  "scope_key": "n64-rom-forge",
+  "case_id": "REQUIRED",
+  "created_utc": "REQUIRED",
+  "state": "HYPOTHESIS",
+  "hypothesis": {
+    "claim": "REQUIRED",
+    "observations": [],
+    "alternatives": []
+  },
+  "discriminator": {
+    "kind": "probe|toggle|replay|trace|differential",
+    "procedure": "REQUIRED",
+    "expected_if_true": "REQUIRED",
+    "expected_if_false": "REQUIRED",
+    "evidence_paths": [],
+    "result": "PENDING"
+  },
+  "patch": {
+    "allowed": false,
+    "path_or_commit": null,
+    "state": "BLOCKED_PENDING_DISCRIMINATOR"
+  },
+  "finding": {
+    "statement": null,
+    "confidence": "UNSET",
+    "survives_patch_revert": true,
+    "promotion_state": "UNADJUDICATED"
+  }
+}

@@ -10,6 +10,7 @@ sys.path.insert(0, str(ROOT))
 
 from scripts.check_forbidden_payloads import find_forbidden
 
+
 class ForbiddenPayloadTests(unittest.TestCase):
     def test_clean_tree_passes(self) -> None:
         with tempfile.TemporaryDirectory() as td:
@@ -33,6 +34,14 @@ class ForbiddenPayloadTests(unittest.TestCase):
             (root / "build").mkdir()
             (root / "build" / "artifact.bin").write_bytes(b"x")
             self.assertEqual(find_forbidden(root), ["build/artifact.bin"])
+
+    def test_git_metadata_is_ignored(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / ".git" / "objects").mkdir(parents=True)
+            (root / ".git" / "objects" / "pack.bin").write_bytes(b"x")
+            self.assertEqual(find_forbidden(root), [])
+
 
 if __name__ == "__main__":
     unittest.main()
