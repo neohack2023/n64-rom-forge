@@ -10,7 +10,9 @@ This repository contains source, contracts, adapter metadata, reproducible emula
 
 - read-only ROM fingerprinting, byte-order normalization, adapter resolution, CIC/checksum evidence, and JSON receipts
 - portable N64 structural profilers and table/resource detectors
-- MIPS big-endian disassembly and JAL xref helpers with branch-delay-slot awareness
+- VR4300/MIPS III big-endian disassembly with explicit delay-slot metadata
+- JAL/JALR XREF analysis with bounded register/stack propagation and provenance
+- local control-flow slices around recovered callsites
 - strict compression probing and DKR RZIP decoding
 - nested LUT/payload unpacking
 - debugger register-trace parsing
@@ -73,6 +75,8 @@ Observation -> Hypothesis -> Discriminator -> Evidence
 External search is used as a narrowed hypothesis source after local evidence stalls, not as a substitute for ROM/runtime validation. Infrastructure failures do not count as ROM hypothesis failures.
 
 See `docs/workflows/EVIDENCE_WORKFLOW.md` and `schemas/experiments/EXPERIMENT_ENVELOPE.schema.json`.
+
+MIPS analysis behavior and limits are documented in `docs/workflows/MIPS_ANALYSIS.md`.
 
 ## Read-only ROM wrapper
 
