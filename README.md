@@ -45,6 +45,14 @@ knowledge/       promoted common and ROM-specific findings
 schemas/         receipts, adapters, and experiment contracts
 docs/workflows/  evidence, experiment, and promotion workflows
 ```
+## Playable DKR patches
+
+### All Tracks Unlocked
+
+`patches/dkr/all_tracks_unlocked.py` applies a hash-gated one-instruction patch to DKR USA Rev A and repairs the CIC-6103 CRCs. It removes only the Tracks-menu branch that skips population of locked track IDs. Adventure Two state itself is not globally forced.
+
+The validated output SHA-256 is `52ee8add4245d16d3686a1801c58bea1aff2fc7cf25c12922a0f408aef34a130`.
+
 ## Diddy Kong Racing Rev A
 
 The current DKR lane is based on a locally verified USA Rev A ROM identity. Only hashes and derived semantic knowledge are committed.

@@ -1,0 +1,16 @@
+{
+  "schema": "n64rf.dkr_patch.v1",
+  "name": "All Tracks Unlocked",
+  "game": "Diddy Kong Racing",
+  "revision": "USA Rev A",
+  "source_sha256": "7de1a8fb2a9558cfc3d9ad4497df698c1e89cf7095ac1531557df2af40ba8bcf",
+  "output_sha256": "52ee8add4245d16d3686a1801c58bea1aff2fc7cf25c12922a0f408aef34a130",
+  "patch_vram": "0x8008F344",
+  "patch_rom_offset": "0x8FF44",
+  "original_word": "0x10400008",
+  "replacement_word": "0x00000000",
+  "effect": "The Tracks-menu Adventure Two predicate branch is removed, so the real track ID is populated for every slot without globally setting Adventure Two unlocked.",
+  "crc1": "0xE402433D",
+  "crc2": "0x882FC584",
+  "host_validation": "Booted in Mupen64Plus 2.6.0 cached interpreter on Host02."
+}
