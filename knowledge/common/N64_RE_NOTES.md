@@ -23,3 +23,10 @@ A debugger command sequence is not proof by itself. Record the intended breakpoi
 ## Portability
 
 Keep generic tools parameterized. ROM-specific labels and addresses belong in adapters or knowledge packages, not in generic analyzers.
+
+## Continuity handoff
+
+For the consolidated 2026-10-03 N64 reverse-engineering state, including DKR structural/runtime findings, All-Tracks acceptance, Developer Lab source-build state, MIPS analyzer capabilities, emulator incident lessons, and next gates, read:
+
+- `knowledge/common/N64_RE_CHAT_HANDOFF_2026-10-03.md`
+- `knowledge/common/N64_RE_CHAT_HANDOFF_2026-10-03.json`

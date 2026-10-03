@@ -1,0 +1,102 @@
+{
+  "schema": "n64.re.chat_handoff.v1",
+  "date": "2026-10-03",
+  "state": "DURABLE_CONTEXT_HANDOFF",
+  "scope_keys": ["n64-rom-research", "n64-rom-forge"],
+  "authority_order": [
+    "exact_local_rom_identity_and_bytes",
+    "deterministic_static_analysis",
+    "emulator_runtime_witness",
+    "reproducible_experiment_receipt",
+    "external_source_decomp_correlation",
+    "general_web_knowledge"
+  ],
+  "search_policy": {
+    "local_first": true,
+    "external_search_after_evidence_bearing_strikes": 3,
+    "infrastructure_failures_count_as_strikes": false,
+    "successful_discriminator_resets_strikes": true
+  },
+  "paths": {
+    "research_workspace": "C:\\AIOS\\04_WORKSPACES\\EMULATION\\N64\\WORKSPACES\\N64_ROM_REVERSE_ENGINEERING_01",
+    "port_lab": "C:\\AIOS\\04_WORKSPACES\\EMULATION\\N64\\WORKSPACES\\N64_CROSS_PLATFORM_PORT_LAB_01",
+    "emulator_runtime": "C:\\AIOS\\01_TOOLS\\N64_EMULATION_RUNTIME_01",
+    "forge_repo": "C:\\AIOS\\99_STAGING\\n64-rom-forge-sync",
+    "wsl_runtime": "C:\\AIOS\\01_TOOLS\\WSL_RUNTIME_01"
+  },
+  "dkr_us_reva": {
+    "size": 12582912,
+    "md5": "b31f8cca50f31acc9b999ed5b779d6ed",
+    "sha1": "6d96743d46f8c0cd0edb0ec5600b003c89b93755",
+    "sha256": "7de1a8fb2a9558cfc3d9ad4497df698c1e89cf7095ac1531557df2af40ba8bcf",
+    "entrypoint": "0x80100400",
+    "cic": "6103/X103",
+    "asset_lut_rom": "0xED0E0",
+    "asset_lut_count": 50,
+    "payload_base": "0xED1B0",
+    "compression_wrapper": "LE_u32_decoded_size + 0x09 + raw_DEFLATE + zero_pad_to_16",
+    "valid_nested_rzip": 1052,
+    "object_map_slots": 138,
+    "nonempty_object_maps": 136,
+    "placement_records": 9426,
+    "unique_level_object_ids": 85,
+    "object_definition_slots": 304,
+    "resolved_object_model_ids": 177,
+    "native_level_selector": "0x8006B490",
+    "object_constructor": "0x8000EA54",
+    "direct_level_boot": {
+      "state": "PASS",
+      "validated_level": "Ancient Lake",
+      "level_index": 5,
+      "slot0_map": 5,
+      "slot1_map": 73
+    }
+  },
+  "all_tracks_patch": {
+    "state": "USER_VALIDATED_END_TO_END",
+    "branch_vram": "0x8008F344",
+    "rom_offset": "0x8FF44",
+    "before_word": "0x10400008",
+    "after_word": "0x00000000",
+    "output_sha256": "52ee8add4245d16d3686a1801c58bea1aff2fc7cf25c12922a0f408aef34a130",
+    "crc1": "E402433D",
+    "crc2": "882FC584"
+  },
+  "developer_lab_v1": {
+    "decomp_commit": "a5eb080fa8f91b97d6f6495e0549ef7121ae7496",
+    "source_files": ["src/menu.h", "src/menu.c", "src/tracks.h", "src/tracks.c", "src/audio_spatial.h"],
+    "insertions": 148,
+    "deletions": 6,
+    "build_state": "PASS",
+    "visual_feature_acceptance": "PENDING",
+    "rom_sha256": "1307E2F002D0032E926F32401C369A7DA1D46BDDC2AD3E22B3B33A70191595BA",
+    "rom_sha1": "251F5BA722185FA0BF2E274F2CA149FF15D193D9",
+    "crc1": "C03EB9BC",
+    "crc2": "D0D49425",
+    "compile_fix": "gGameNumPlayers -> gNumberOfActivePlayers"
+  },
+  "emulator_incident_2026_10_03": {
+    "symptom": "black_video_audio_and_cpu_active",
+    "rom_corruption_proven": false,
+    "developer_lab_causal": false,
+    "root_cause": "UNCONFIRMED",
+    "confounders": ["emulator_working_directory", "stale_or_concurrent_mupen_process_state"],
+    "required_future_acceptance": ["single_instance", "explicit_runtime_cwd", "record_pid_owner_config_hash", "visible_frame_capture"]
+  },
+  "pending_gates": [
+    "developer_lab_menu_visual_acceptance",
+    "audio_reverb_debug_behavior_acceptance",
+    "developer_lab_repo_promotion",
+    "emulator_black_video_root_cause",
+    "explicit_cwd_single_instance_n64_launcher",
+    "generalized_named_level_launcher",
+    "remaining_dkr_transition_argument_semantics",
+    "object_behavior_and_placement_parameter_semantics"
+  ],
+  "evidence_pointers": [
+    "knowledge/common/N64_RE_NOTES.md",
+    "docs/workflows/EVIDENCE_WORKFLOW.md",
+    "knowledge/dkr/README.md",
+    "workspace:reports/HOST02_N64_VIDEO_BLACK_AUDIO_ACTIVE_01.md"
+  ]
+}
